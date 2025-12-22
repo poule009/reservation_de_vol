@@ -411,7 +411,7 @@
                     @if($reservation->payment)
                     <div style="margin-top: 10px; font-size: 10px; color: #6B7280;">
                         Méthode de paiement: {{ ucfirst(str_replace('_', ' ', $reservation->payment->payment_method)) }} •
-                        Date: {{ $reservation->payment->payment_date->format('d/m/Y H:i') }}
+                        Date: {{ $reservation->payment->paid_at->format('d/m/Y H:i') }}
                     </div>
                     @endif
                 </div>

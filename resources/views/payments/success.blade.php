@@ -153,7 +153,7 @@
                         </div>
                         <div class="flex justify-between text-sm mt-1">
                             <span class="text-gray-600">Date du paiement</span>
-                            <span>{{ $reservation->payment->payment_date->format('d/m/Y H:i') }}</span>
+                            <span>{{ $reservation->payment->paid_at->format('d/m/Y H:i') }}</span>
                         </div>
                     </div>
                     @endif

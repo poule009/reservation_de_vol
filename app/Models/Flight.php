@@ -93,6 +93,14 @@ class Flight extends Model
         return $departure->diffInMinutes($arrival);
     }
 
+    /**
+     * Get the aircraft type from the additional_info field.
+     */
+    public function getAircraftTypeAttribute()
+    {
+        return $this->additional_info['aircraft_type'] ?? null;
+    }
+
     // Vérifier si le vol est complet
     public function isFull(): bool
     {

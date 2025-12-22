@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Payment;
 use App\Models\Reservation;
+use App\Models\Ticket;
 use App\Services\PaymentService;
 use App\Services\TicketService;
 use Illuminate\Http\Request;
@@ -11,92 +13,67 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    protected $paymentService;
-    protected $ticketService;
-
-    public function __construct(PaymentService $paymentService, TicketService $ticketService)
-    {
-        $this->paymentService = $paymentService;
-        $this->ticketService = $ticketService;
-    }
-
-    /**
-     * Page de paiement
-     */
+    // Page de paiement pour une réservation
     public function create(Reservation $reservation)
     {
-        if ($reservation->user_id !== Auth::id()) {
-abort(403);
-} 
-if ($reservation->status !== 'pending') {
-        return redirect()->route('reservations.show', $reservation)
-            ->with('error', 'Cette réservation a déjà été payée');
+        $reservation->load(['flight', 'seats']);
+
+        // On calcule le montant à payer
+        $montant = $reservation->total_amount;
+
+        return view('payments.create', compact('reservation', 'montant'));
     }
 
-    if ($reservation->seats()->count() === 0) {
-        return redirect()->route('seats.select', $reservation)
-            ->with('error', 'Veuillez d\'abord sélectionner vos sièges');
+    // Traitement du paiement et génération du ticket
+    public function process(Request $request, Reservation $reservation)
+    {
+        $request->validate([
+            'payment_method' => ['required', 'in:card,mobile_money'],
+        ]);
+
+        $reservation->load(['flight', 'seats', 'user']);
+
+        $paymentService = new PaymentService();
+        $result = $paymentService->processPayment($reservation, $request->all());
+
+        if ($result['success']) {
+            // Générer le ticket si pas déjà créé
+            if (!$reservation->ticket) {
+                $ticket = Ticket::create([
+                    'reservation_id' => $reservation->id,
+                    'numero_billet'  => $reservation->booking_reference,
+                    'pdf_path'       => null,
+                ]);
+            }
+
+            return redirect()->route('payments.success', $reservation);
+        } else {
+            return back()->withErrors(['payment' => $result['message']]);
+        }
     }
 
-    $reservation->load(['flight', 'seats']);
+    // Page de succès après paiement
+    public function success(Reservation $reservation)
+    {
+        // Vérifier que la réservation est confirmée et payée
+        if ($reservation->status !== 'confirmed' || !$reservation->payment || $reservation->payment->status !== 'completed') {
+            abort(403, 'Access denied');
+        }
 
-    return view('payments.create', compact('reservation'));
-}
+        $reservation->load(['flight', 'seats', 'user', 'payment']);
 
-/**
- * Traiter le paiement
- */
-public function store(Request $request, Reservation $reservation)
-{
-    if ($reservation->user_id !== Auth::id()) {
-        abort(403);
+        return view('payments.success', compact('reservation'));
     }
 
-    $request->validate([
-        'payment_method' => 'required|in:card,mobile_money,bank_transfer',
-    ]);
+    // Téléchargement du ticket
+    public function ticket(Reservation $reservation)
+    {
+        // Vérifier que la réservation est confirmée et payée
+        if ($reservation->status !== 'confirmed' || !$reservation->payment || $reservation->payment->status !== 'completed') {
+            abort(403, 'Ticket not available');
+        }
 
-    $result = $this->paymentService->processPayment($reservation, $request->all());
-
-    if ($result['success']) {
-        return redirect()->route('payments.success', $reservation);
+        $ticketService = new TicketService();
+        return $ticketService->downloadTicket($reservation);
     }
-
-    return back()->with('error', $result['message']);
-}
-
-/**
- * Page de succès du paiement
- */
-public function success(Reservation $reservation)
-{
-    if ($reservation->user_id !== Auth::id()) {
-        abort(403);
-    }
-
-    if ($reservation->status !== 'confirmed') {
-        return redirect()->route('reservations.show', $reservation);
-    }
-
-    $reservation->load(['flight', 'seats', 'payment']);
-
-    return view('payments.success', compact('reservation'));
-}
-
-/**
- * Télécharger le ticket
- */
-public function downloadTicket(Reservation $reservation)
-{
-    if ($reservation->user_id !== Auth::id()) {
-        abort(403);
-    }
-
-    if ($reservation->status !== 'confirmed') {
-        return redirect()->route('reservations.show', $reservation)
-            ->with('error', 'Le ticket n\'est pas disponible');
-    }
-
-    return $this->ticketService->downloadTicket($reservation);
-}
 }

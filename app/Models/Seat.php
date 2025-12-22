@@ -86,7 +86,7 @@ class Seat extends Model
 
     public function scopeByClass($query, $class)
     {
-        return $query->where('class', $class);
+        return $query->where('seat_class', $class);
     }
 
     /**

@@ -78,9 +78,11 @@ class FlightApiService
                         'price' => $this->calculatePrice($flightData),
                         'total_seats' => 180,
                         'available_seats' => 180,
-                        'aircraft_type' => $flightData['aircraft']['iata'] ?? null,
                         'status' => 'scheduled',
-                        'api_data' => $flightData,
+                        'additional_info' => [
+                            'aircraft_type' => $flightData['aircraft']['iata'] ?? null,
+                            'api_data' => $flightData
+                        ],
                     ]
                 );
 

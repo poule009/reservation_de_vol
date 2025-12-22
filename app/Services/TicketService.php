@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Reservation;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 use App\Mail\TicketMail;
 
 class TicketService
@@ -14,12 +14,9 @@ class TicketService
     {
         $reservation->load(['flight', 'seats', 'user', 'payment', 'ticket']);
 
-        $qrCode = $this->generateQrCode($reservation);
-
         return Pdf::loadView('tickets.pdf', [
             'reservation' => $reservation,
             'ticket' => $reservation->ticket,
-            'qrCode' => $qrCode,
         ]);
     }
 
@@ -29,24 +26,7 @@ class TicketService
         return $pdf->download("ticket-{$reservation->booking_reference}.pdf");
     }
 
-    public function generateQrCode(Reservation $reservation)
-    {
-        try {
-            $data = json_encode([
-                'ref' => $reservation->booking_reference,
-                'psngr' => $reservation->user?->name ?? 'N/A', // Utilisation sécurisée
-                'flt' => $reservation->flight->flight_number,
-                'date' => $reservation->flight->departure_time->format('Y-m-d H:i'),
-            ]);
 
-            // Format SVG recommandé pour PDF (plus stable que PNG en base64)
-            $qrCodeSVG = QrCode::format('svg')->size(150)->generate($data);
-            
-            return base64_encode($qrCodeSVG);
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
 
     public function emailTicket(Reservation $reservation)
     {

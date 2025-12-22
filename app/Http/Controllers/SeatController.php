@@ -26,12 +26,12 @@ class SeatController extends Controller
 
         $flight = $reservation->flight;
         
-        // Organiser les sièges par rangée
+        
         $seats = $flight->seats()
             ->orderBy('seat_number')
             ->get()
             ->groupBy(function ($seat) {
-                return intval($seat->seat_number); // Grouper par numéro de rangée
+                return intval($seat->seat_number); 
             });
 
         // Sièges déjà sélectionnés (s'il y en a)
@@ -56,11 +56,15 @@ class SeatController extends Controller
 
         try {
             DB::transaction(function () use ($request, $reservation) {
+
+
                 // Vérifier que tous les sièges sont disponibles
                 $seats = Seat::whereIn('id', $request->seats)
                     ->where('flight_id', $reservation->flight_id)
                     ->where('status', 'available')
                     ->get();
+
+
 
                 if ($seats->count() !== count($request->seats)) {
                     throw new \Exception('Certains sièges ne sont plus disponibles');
@@ -77,6 +81,7 @@ class SeatController extends Controller
                 // Réserver les nouveaux sièges
                 foreach ($seats as $seat) {
                     $seat->reserve($reservation->id);
+
                     // Broadcaster la mise à jour
                     broadcast(new SeatUpdated($seat))->toOthers();
                 }
@@ -97,9 +102,7 @@ class SeatController extends Controller
         }
     }
 
-    /**
-     * Obtenir les sièges disponibles en temps réel (API)
-     */
+    // Obtenir les sièges disponibles en temps réel (API)
     public function available(Reservation $reservation)
     {
         $seats = $reservation->flight->seats()
@@ -112,9 +115,8 @@ class SeatController extends Controller
         ]);
     }
 
-    /**
-     * Réserver temporairement un siège (pour éviter double réservation)
-     */
+    //Réserver temporairement un siège (pour éviter double réservation)
+     
     public function hold(Request $request, Seat $seat)
     {
         if ($seat->status !== 'available') {
@@ -124,7 +126,7 @@ class SeatController extends Controller
             ], 400);
         }
 
-        // Verrouiller temporairement (5 minutes)
+        
         // Dans une vraie app, utilisez Redis ou Cache
         $seat->update(['status' => 'reserved']);
 
@@ -134,9 +136,8 @@ class SeatController extends Controller
         ]);
     }
 
-    /**
-     * Libérer un siège temporairement réservé
-     */
+    // Libérer un siège temporairement réservé
+     
     public function release(Seat $seat)
     {
         if ($seat->status === 'reserved' && !$seat->reservation_id) {

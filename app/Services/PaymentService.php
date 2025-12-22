@@ -14,24 +14,28 @@ class PaymentService
     {
         DB::beginTransaction();
         try {
-            // Calculate total amount
-            $totalAmount = $reservation->seats->sum('price');
+            // Calcul total
+            $totalAmount = $reservation->total_amount;
 
             // Create payment record
             $payment = Payment::create([
                 'reservation_id' => $reservation->id,
+                'user_id' => $reservation->user_id,
                 'amount' => $totalAmount,
-                'currency' => 'EUR',
+                'currency' => 'XOF',
                 'payment_method' => $data['payment_method'],
                 'status' => 'pending',
                 'transaction_id' => uniqid('txn_'),
             ]);
 
-            // Simulate payment processing (replace with actual payment gateway)
+            // Simul payment
             $paymentSuccess = $this->simulatePaymentProcessing($data);
 
             if ($paymentSuccess) {
-                $payment->update(['status' => 'completed']);
+                $payment->update([
+                    'status' => 'completed',
+                    'paid_at' => now()
+                ]);
                 $reservation->update(['status' => 'confirmed']);
 
                 DB::commit();
@@ -65,6 +69,6 @@ class PaymentService
     {
         // Simulate payment success/failure
         // In a real application, integrate with Stripe, PayPal, etc.
-        return rand(0, 1) === 1; // 50% success rate for simulation
+        return rand(1, 1) === 1; // 50% success rate for simulation
     }
 }

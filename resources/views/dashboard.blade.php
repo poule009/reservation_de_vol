@@ -7,8 +7,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Bienvenue, {{ Auth::user()->name }}</h1>
-        <p class="mt-2 text-sm text-gray-600">Gérez vos réservations et découvrez de nouveaux vols</p>
+        <h1 class="text-3xl font-bold text-white">Bienvenue, {{ Auth::user()->name }}</h1>
+        <p class="mt-2 text-sm text-gray-300">Gérez vos réservations et découvrez de nouveaux vols</p>
     </div>
     
     <!-- Statistiques -->
@@ -87,7 +87,7 @@
     <div class="mb-8">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold text-gray-900">Vos prochains vols</h2>
-            <a href="{{ route('reservations.index') }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+            <a href="{{ route('reservations.index') }}" class="text-white hover:text-gray-300 text-sm font-medium">
                 Voir tout →
             </a>
         </div>
@@ -135,12 +135,12 @@
                     </div>
                     
                     <div class="mt-6 flex space-x-3">
-                        <a href="{{ route('reservations.show', $reservation) }}" 
-                           class="flex-1 bg-indigo-600 text-white text-center px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">
+                        <a href="{{ route('reservations.show', $reservation) }}"
+                           class="flex-1 bg-black text-white text-center px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-900">
                             Détails
                         </a>
-                        <a href="{{ route('payments.ticket', $reservation) }}" 
-                           class="flex-1 bg-gray-200 text-gray-700 text-center px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-300">
+                        <a href="{{ route('payments.ticket', $reservation) }}"
+                           class="flex-1 bg-black text-white text-center px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-900">
                             Ticket
                         </a>
                     </div>
@@ -164,7 +164,7 @@
             </div>
             <div class="mt-8 lg:mt-0 lg:flex-shrink-0">
                 <a href="{{ route('flights.index') }}"
-                   class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 transition-colors">
+                   class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-900 transition-colors">
                     <svg class="mr-2 -ml-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -179,7 +179,7 @@
     
     <!-- Réservations récentes -->
     <div class="mt-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Réservations récentes</h2>
+        <h2 class="text-xl font-semibold text-white mb-4">Réservations récentes</h2>
         
         <div class="bg-white shadow-sm rounded-lg overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
@@ -223,10 +223,10 @@
                             {{ number_format($reservation->total_amount, 0, ',', ' ') }} FCFA
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('reservations.show', $reservation) }}" 
-                               class="text-indigo-600 hover:text-indigo-900">
-                                Voir
-                            </a>
+                        <a href="{{ route('reservations.show', $reservation) }}"
+                           class="text-white hover:text-gray-300">
+                            Voir
+                        </a>
                         </td>
                     </tr>
                     @empty

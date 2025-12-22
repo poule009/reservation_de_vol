@@ -20,21 +20,21 @@
     
     @stack('styles')
 </head>
-<body class="font-sans antialiased bg-gray-100">
+<body class="font-sans antialiased bg-gray-800">
     <div class="min-h-screen">
-        <!-- Navigation -->
+    
         <nav class="bg-white shadow-sm border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex">
-                        <!-- Logo -->
+                
                         <div class="flex-shrink-0 flex items-center">
                             <a href="{{ route('dashboard') }}" class="text-2xl font-bold text-indigo-600">
-                                ✈️ FlightBook
+                                Aidara FlightBook
                             </a>
                         </div>
                         
-                        <!-- Navigation Links -->
+                        
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                             <a href="{{ route('dashboard') }}" 
                                class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {{ request()->routeIs('dashboard') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     
-                    <!-- User Menu -->
+                
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                     
-                    <!-- Mobile menu button -->
+                    
                     <div class="flex items-center sm:hidden">
                         <button @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -90,7 +90,7 @@
             </div>
         </nav>
         
-        <!-- Messages Flash -->
+    
         @if (session('success'))
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
                 <div class="bg-green-50 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
@@ -119,17 +119,35 @@
             </div>
         @endif
         
-        <!-- Page Content -->
+        
         <main class="py-8">
             @yield('content')
         </main>
         
-        <!-- Footer -->
+    
+    
         <footer class="bg-white border-t border-gray-200 mt-12">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-sm text-gray-500">
-                    &copy; {{ date('Y') }} FlightBook. Tous droits réservés.
-                </p>
+            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                
+                    <div class="text-center md:text-left">
+                        <span class="text-xl font-bold text-indigo-600">FlightBook</span>
+                    </div>
+
+                
+                    <div class="text-center md:text-left">
+                        <p class="text-sm text-gray-600">
+                            Contact: <a href="mailto:support@flightbook.com" class="text-indigo-600 hover:text-indigo-800">support@flightbook.com</a>
+                        </p>
+                    </div>
+
+            
+                    <div class="text-center md:text-right">
+                        <p class="text-sm text-gray-500">
+                            &copy; {{ date('Y') }} FlightBook. Tous droits réservés.
+                        </p>
+                    </div>
+                </div>
             </div>
         </footer>
     </div>

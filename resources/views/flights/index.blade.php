@@ -8,8 +8,8 @@
     <!-- Header avec recherche -->
     <div class="mb-12">
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 mb-2"></h1>
-            <p class="text-lg text-gray-600">Trouvez votre vol idéal pour votre prochain voyage</p>
+            <h1 class="text-4xl font-bold text-white mb-2"></h1>
+            <p class="text-lg text-gray-300">Trouvez votre vol idéal pour votre prochain voyage</p>
         </div>
 
         <!-- Formulaire de recherche -->
@@ -102,8 +102,8 @@
     <div class="mb-6 flex justify-end">
         <form action="{{ route('flights.sync') }}" method="POST">
             @csrf
-            <button type="submit" 
-                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+            <button type="submit"
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-900 focus:outline-none">
                 <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
@@ -118,7 +118,7 @@
         @foreach($flights as $flight)
         <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-gray-100">
             <!-- Header avec dégradé -->
-            <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-6 text-white">
+            <div class="bg-rose-500 bg-opacity-50 p-6 text-white">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
                         <div class="bg-white bg-opacity-20 rounded-full p-3">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold
-                            @if($flight->available_seats > 50) bg-green-500 text-white
+                            @if($flight->available_seats > 50) bg-blue-500 text-white
                             @elseif($flight->available_seats > 20) bg-yellow-500 text-white
                             @else bg-red-500 text-white
                             @endif">
@@ -193,8 +193,8 @@
                     <div class="text-center lg:text-right">
                         <div class="flex items-center justify-center lg:justify-end mb-3">
                             <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide mr-3">Arrivée</span>
-                            <div class="bg-green-100 rounded-full p-2">
-                                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-blue-100 rounded-full p-2">
+                                <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
@@ -202,7 +202,7 @@
                         </div>
                         <p class="text-3xl font-bold text-gray-900 mb-1">{{ $flight->arrival_airport }}</p>
                         <p class="text-sm text-gray-500 mb-2">{{ $flight->arrival_time->format('d/m/Y') }}</p>
-                        <p class="text-2xl font-bold text-green-600">{{ $flight->arrival_time->format('H:i') }}</p>
+                        <p class="text-2xl font-bold text-blue-600">{{ $flight->arrival_time->format('H:i') }}</p>
                     </div>
                 </div>
 
@@ -227,7 +227,7 @@
                                 Voir détails
                             </a>
                             <a href="{{ route('reservations.create', $flight) }}"
-                               class="inline-flex justify-center items-center px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 rounded-xl transform hover:scale-105 transition-all duration-200 font-semibold shadow-lg">
+                               class="inline-flex justify-center items-center px-8 py-3 bg-blue-600 text-white hover:from-green-600 hover:to-emerald-700 rounded-xl transform hover:scale-105 transition-all duration-200 font-semibold shadow-lg">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
@@ -270,8 +270,8 @@
             @endif
             <form action="{{ route('flights.sync') }}" method="POST" class="inline">
                 @csrf
-                <button type="submit" 
-                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                <button type="submit"
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-900">
                     <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>

@@ -10,10 +10,13 @@ use App\Http\Controllers\PaymentController;
 
 // Page d'accueil (redirection vers login ou dashboard)
 Route::get('/', function () {
-    return auth()->check() 
-        ? redirect()->route('dashboard') 
-        : redirect()->route('register');
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('welcome');
 });
+Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -37,14 +40,14 @@ Route::middleware('auth')->group(function () {
 
 
 // Routes d'authentification (générées par Breeze)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // Routes protégées (nécessitent authentification)
 Route::middleware(['auth', 'verified'])->group(function () {
-    
+
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Vols
     Route::prefix('flights')->name('flights.')->group(function () {
         Route::get('/', [FlightController::class, 'index'])->name('index');
@@ -52,7 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{flight}', [FlightController::class, 'show'])->name('show');
         Route::post('/sync', [FlightController::class, 'sync'])->name('sync');
     });
-    
+
     // Réservations
     Route::prefix('reservations')->name('reservations.')->group(function () {
         Route::get('/', [ReservationController::class, 'index'])->name('index');
@@ -63,24 +66,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/{reservation}', [ReservationController::class, 'update'])->name('update');
         Route::delete('/{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
     });
-    
+
     // Sièges
     Route::prefix('seats')->name('seats.')->group(function () {
         Route::get('/{reservation}/select', [SeatController::class, 'select'])->name('select');
         Route::post('/{reservation}', [SeatController::class, 'store'])->name('store');
-        
+
         // API pour temps réel
         Route::get('/{reservation}/available', [SeatController::class, 'available'])->name('available');
         Route::post('/{seat}/hold', [SeatController::class, 'hold'])->name('hold');
         Route::post('/{seat}/release', [SeatController::class, 'release'])->name('release');
     });
-    
+
     // Paiements
     Route::prefix('payments')->name('payments.')->group(function () {
         Route::get('/{reservation}', [PaymentController::class, 'create'])->name('create');
-        Route::post('/{reservation}', [PaymentController::class, 'store'])->name('store');
+        Route::post('/{reservation}/process', [PaymentController::class, 'process'])->name('process');
         Route::get('/{reservation}/success', [PaymentController::class, 'success'])->name('success');
-        Route::get('/{reservation}/ticket', [PaymentController::class, 'downloadTicket'])->name('ticket');
+        Route::get('/{reservation}/ticket', [PaymentController::class, 'ticket'])->name('ticket');
     });
 });
 
@@ -96,4 +99,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

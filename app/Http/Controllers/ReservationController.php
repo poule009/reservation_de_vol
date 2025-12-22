@@ -126,15 +126,21 @@ class ReservationController extends Controller
     {
         $this->authorize('delete', $reservation);
 
-        DB::transaction(function () use ($reservation) {
-            // Libérer les sièges
-            $reservation->seats()->update([
-                'status' => 'available',
-                'reservation_id' => null,
-            ]);
+        $reservation->load(['flight', 'seats', 'payment']);
 
-            // Incrémenter les sièges disponibles
-            $reservation->flight->increment('available_seats', $reservation->seats()->count());
+        DB::transaction(function () use ($reservation) {
+            $seatsCount = $reservation->seats->count();
+
+            if ($seatsCount > 0) {
+                $reservation->seats()->update([
+                    'status' => 'available',
+                    'reservation_id' => null,
+                ]);
+
+                if ($reservation->flight) {
+                    $reservation->flight->increment('available_seats', $seatsCount);
+                }
+            }
 
             // Annuler la réservation
             $reservation->update(['status' => 'cancelled']);

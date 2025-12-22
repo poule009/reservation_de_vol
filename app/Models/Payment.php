@@ -2,40 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
-    use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'reservation_id',
+        'user_id',
+        'transaction_id',
         'amount',
+        'currency',
         'payment_method',
         'status',
-        'payment_date',
-        'transaction_id',
+        'payment_details',
+        'paid_at',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
-        'payment_date' => 'datetime',
         'amount' => 'decimal:2',
+        'payment_details' => 'array',
+        'paid_at' => 'datetime',
     ];
 
-    public function reservation(): BelongsTo
+    public function reservation()
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Reservation extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -39,6 +41,7 @@ class Reservation extends Model
     protected $casts = [
         'total_amount' => 'decimal:2',
         'passenger_details' => 'array',
+        'booking_date' => 'datetime',
     ];
 
     /**
@@ -74,10 +77,88 @@ class Reservation extends Model
     }
 
     /**
+     * Get the ticket associated with the reservation.
+     */
+    public function ticket(): HasOne
+    {
+        return $this->hasOne(Ticket::class);
+    }
+
+    /**
      * Get the full name of the passenger.
      */
     public function getFullPassengerName(): string
     {
         return trim($this->passenger_first_name . ' ' . $this->passenger_last_name) ?: 'Passager Inconnu';
+    }
+
+    /**
+     * Scopes
+     */
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeConfirmed($query)
+    {
+        return $query->where('status', 'confirmed');
+    }
+
+    public function scopeForUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Méthodes utilitaires
+     */
+
+    // Générer un numéro de réservation unique
+    public static function generateBookingReference(): string
+    {
+        do {
+            $reference = strtoupper(Str::random(6) . rand(100, 999));
+        } while (self::where('booking_reference', $reference)->exists());
+
+        return $reference;
+    }
+
+    // Confirmer la réservation
+    public function confirm(): void
+    {
+        $this->update(['status' => 'confirmed']);
+    }
+
+    // Annuler la réservation
+    public function cancel(): void
+    {
+        $this->update(['status' => 'cancelled']);
+
+        // Libérer les sièges
+        $this->seats()->update([
+            'status' => 'available',
+            'reservation_id' => null,
+            'selected_at' => null,
+            'selected_by' => null,
+        ]);
+
+        // Incrémenter les sièges disponibles du vol
+        $this->flight->incrementSeats($this->seats()->count());
+    }
+
+    // Vérifier si la réservation peut être modifiée
+    public function canBeModified(): bool
+    {
+        return in_array($this->status, ['pending']) &&
+               $this->flight->departure_time->isFuture();
+    }
+
+    // Vérifier si la réservation peut être annulée
+    public function canBeCancelled(): bool
+    {
+        return in_array($this->status, ['pending', 'confirmed']) &&
+               $this->flight->departure_time->isFuture();
     }
 }
