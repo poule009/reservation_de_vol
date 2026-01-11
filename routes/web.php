@@ -28,17 +28,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Routes d'authentification (générées par Breeze)
 require __DIR__ . '/auth.php';
 

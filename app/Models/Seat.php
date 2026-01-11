@@ -44,6 +44,14 @@ class Seat extends Model
     ];
 
     /**
+     * Accessors
+     */
+    public function getColumnAttribute()
+    {
+        return substr($this->seat_number, -1);
+    }
+
+    /**
      * Relations
      */
     

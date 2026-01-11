@@ -9,7 +9,7 @@
     <nav class="flex mb-6" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li>
-                <a href="{{ route('reservations.index') }}" class="text-gray-500 hover:text-gray-700">Mes réservations</a>
+                <a href="{{ route('reservations.index') }}" class="bg-white text-gray-500 hover:text-gray-700 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium p-700 ">Mes réservations</a>
             </li>
             <li>
                 <span class="text-gray-400 mx-2">/</span>
@@ -18,7 +18,7 @@
         </ol>
     </nav>
 
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Détails de la réservation</h1>
+    <h1 class="text-3xl font-bold text-white mb-900 mb-8">Détails de la réservation</h1>
 
     <!-- Statut de la réservation -->
     <div class="mb-6">

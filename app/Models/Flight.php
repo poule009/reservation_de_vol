@@ -10,6 +10,12 @@ class Flight extends Model
 {
     use HasFactory;
 
+    const STATUS_SCHEDULED = 'scheduled';
+    const STATUS_CANCELLED = 'cancelled';
+    const STATUS_DELAYED = 'delayed';
+    const STATUS_DEPARTED = 'departed';
+    const STATUS_ARRIVED = 'arrived';
+
     /**
      * The attributes that are mass assignable.
      */
@@ -87,8 +93,12 @@ class Flight extends Model
     // Calculer la durée du vol en minutes
     public function getDurationAttribute()
     {
-        $departure = Carbon::parse($this->departure_time);
-        $arrival = Carbon::parse($this->arrival_time);
+        if (!$this->departure_time || !$this->arrival_time) {
+            return null;
+        }
+
+        $departure = $this->departure_time instanceof Carbon ? $this->departure_time : Carbon::parse($this->departure_time);
+        $arrival = $this->arrival_time instanceof Carbon ? $this->arrival_time : Carbon::parse($this->arrival_time);
 
         return $departure->diffInMinutes($arrival);
     }
@@ -98,7 +108,7 @@ class Flight extends Model
      */
     public function getAircraftTypeAttribute()
     {
-        return $this->additional_info['aircraft_type'] ?? null;
+        return is_array($this->additional_info) ? ($this->additional_info['aircraft_type'] ?? null) : null;
     }
 
     // Vérifier si le vol est complet

@@ -26,10 +26,25 @@ class StoreReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'passenger_first_name' => 'required|string|max:255',
-            'passenger_last_name' => 'required|string|max:255',
-            'passenger_phone' => 'required|string|max:20',
-            'passenger_email' => 'nullable|email|max:255',
+            'passenger_first_name' => 'required|string|max:255|not_in:Non spécifié,non spécifié,Non spécifiée,non spécifiée',
+            'passenger_last_name' => 'required|string|max:255|not_in:Non spécifié,non spécifié,Non spécifiée,non spécifiée',
+            'passenger_phone' => 'required|string|max:20|not_in:Non spécifié,non spécifié,Non spécifiée,non spécifiée',
+            'passenger_email' => 'nullable|email|max:255|not_in:Non spécifié,non spécifié,Non spécifiée,non spécifiée',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages()
+    {
+        return [
+            'passenger_first_name.not_in' => 'Le prénom ne peut pas être "Non spécifié".',
+            'passenger_last_name.not_in' => 'Le nom ne peut pas être "Non spécifié".',
+            'passenger_phone.not_in' => 'Le numéro de téléphone ne peut pas être "Non spécifié".',
+            'passenger_email.not_in' => 'L\'email ne peut pas être "Non spécifié".',
         ];
     }
 }

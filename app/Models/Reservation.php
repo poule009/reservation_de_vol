@@ -14,6 +14,10 @@ class Reservation extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_CONFIRMED = 'confirmed';
+    const STATUS_CANCELLED = 'cancelled';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -128,13 +132,13 @@ class Reservation extends Model
     // Confirmer la réservation
     public function confirm(): void
     {
-        $this->update(['status' => 'confirmed']);
+        $this->update(['status' => self::STATUS_CONFIRMED]);
     }
 
     // Annuler la réservation
     public function cancel(): void
     {
-        $this->update(['status' => 'cancelled']);
+        $this->update(['status' => self::STATUS_CANCELLED]);
 
         // Libérer les sièges
         $this->seats()->update([

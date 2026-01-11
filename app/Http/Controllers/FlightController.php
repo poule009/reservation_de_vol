@@ -20,7 +20,9 @@ class FlightController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Flight::available()->with('seats');
+        $query = Flight::available()->with(['seats' => function ($query) {
+            $query->select(['id', 'flight_id', 'status', 'seat_class']);
+        }]);
 
         // Filtres de recherche
         if ($request->filled('departure')) {

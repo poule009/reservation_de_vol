@@ -12,14 +12,14 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Paiement réussi !</h1>
+        <h1 class="text-3xl font-bold text-green-900 mb-2">Paiement réussi !</h1>
         <p class="text-lg text-gray-600">Votre réservation a été confirmée</p>
     </div>
     
     <!-- Carte de confirmation -->
     <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
         <!-- Header avec dégradé -->
-        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-8 text-white">
+        <div class="bg-green-500 bg-opacity-200 px-6 py-8 text-white">
             <div class="flex items-center justify-between mb-4">
                 <div>
                     <p class="text-sm opacity-90">Numéro de réservation</p>
@@ -190,32 +190,32 @@
             <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Instructions importantes
+            Notre cherr Mr Aidara (FlightBook) vous recommande de :
         </h3>
         <ul class="space-y-2 text-sm text-yellow-800">
             <li class="flex items-start">
                 <svg class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
-                Présentez-vous à l'aéroport <strong>2 heures avant le départ</strong>
+                Présentez-vous à l'aéroport 2 heures avant le départ
             </li>
             <li class="flex items-start">
                 <svg class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
-                Munissez-vous de votre <strong>pièce d'identité valide</strong> et de votre <strong>ticket</strong>
+                Munissez-vous de votre pièce d'identité valide et de votre ticket
             </li>
             <li class="flex items-start">
                 <svg class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
-                Vérifiez les <strong>restrictions de bagages</strong> auprès de la compagnie
+                Vérifiez les restrictions de bagages auprès de la compagnie
             </li>
             <li class="flex items-start">
                 <svg class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
-                Vous pouvez annuler votre réservation <strong>jusqu'à 24h avant le départ</strong>
+                Vous pouvez annuler votre réservation jusqu'à 24h avant le départ
             </li>
         </ul>
     </div>

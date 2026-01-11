@@ -152,7 +152,7 @@
     @endif
     
     <!-- Action rapide -->
-    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg overflow-hidden">
+    <div class="bg-blue-500 rounded-lg shadow-lg overflow-hidden">
         <div class="px-6 py-12 sm:px-12 sm:py-16 lg:flex lg:items-center lg:justify-between">
             <div>
                 <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
@@ -162,9 +162,9 @@
                     Découvrez nos vols disponibles et réservez dès maintenant
                 </p>
             </div>
-            <div class="mt-8 lg:mt-0 lg:flex-shrink-0">
+            <div class="bg-white rounded-lg shadow-lg mt-8 lg:mt-0 lg:flex-shrink-0">
                 <a href="{{ route('flights.index') }}"
-                   class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-900 transition-colors">
+                   class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-500 bg-black hover:bg-gray-900 transition-colors">
                     <svg class="mr-2 -ml-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -224,7 +224,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a href="{{ route('reservations.show', $reservation) }}"
-                           class="text-white hover:text-gray-300">
+                           class="bg-blue-500 hover:bg-blue-700 text-white hover:text-gray-300 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
                             Voir
                         </a>
                         </td>

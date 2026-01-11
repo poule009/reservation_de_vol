@@ -61,7 +61,7 @@ class ReservationController extends Controller
                 return Reservation::create([
                     'user_id' => Auth::id(),
                     'flight_id' => $flight->id,
-                    'booking_reference' => $this->generateBookingReference(),
+                    'booking_reference' => Reservation::generateBookingReference(),
                     'passenger_first_name' => $request->passenger_first_name,
                     'passenger_last_name' => $request->passenger_last_name,
                     'passenger_phone' => $request->passenger_phone,

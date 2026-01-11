@@ -9,8 +9,8 @@
     <div class="mb-8">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">{{ $flight->flight_number }}</h1>
-                <p class="text-lg text-gray-600">{{ $flight->airline }}</p>
+                <h1 class="text-3xl font-bold text-white 900">{{ $flight->flight_number }}</h1>
+                <p class="text-lg text-white-600">{{ $flight->airline }}</p>
             </div>
             <div class="flex items-center space-x-4">
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
@@ -22,7 +22,7 @@
                     {{ ucfirst($flight->status) }}
                 </span>
                 <a href="{{ route('flights.index') }}"
-                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                     ← Retour aux vols
                 </a>
             </div>
@@ -114,9 +114,9 @@
         </div>
     </div>
 
-    <!-- Flight Information -->
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <!-- Flight Info -->
+
         <div class="bg-white rounded-lg shadow-sm p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Informations du vol</h3>
             <dl class="space-y-3">
@@ -141,80 +141,118 @@
             </dl>
         </div>
 
-        <!-- Additional Info -->
-        @if($flight->additional_info)
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Informations supplémentaires</h3>
-            <div class="prose prose-sm max-w-none">
-                @foreach($flight->additional_info as $key => $value)
-                    <div class="mb-2">
-                        <span class="font-medium text-gray-700">{{ ucfirst(str_replace('_', ' ', $key)) }}:</span>
-                        <span class="text-gray-600">{{ $value }}</span>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-        @endif
-    </div>
 
-    <!-- Seats Layout -->
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+    </div>
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8 w-full">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Plan des sièges</h3>
-        <div class="grid grid-cols-6 gap-2 max-w-md">
-            @foreach($flight->seats as $seat)
-            <div class="relative">
-                <button
-                    class="w-full aspect-square rounded border-2 text-xs font-medium flex items-center justify-center transition-colors
-                        @if($seat->status === 'available') border-green-200 bg-green-50 text-green-700 hover:bg-green-100
-                        @elseif($seat->status === 'reserved') border-yellow-200 bg-yellow-50 text-yellow-700
-                        @else border-red-200 bg-red-50 text-red-700
-                        @endif"
-                    disabled
-                    title="Siège {{ $seat->seat_number }} - {{ ucfirst($seat->seat_class) }} - {{ ucfirst($seat->status) }}"
-                >
-                    {{ $seat->seat_number }}
-                </button>
-                @if($seat->is_window)
-                    <div class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full" title="Fenêtre"></div>
-                @endif
-                @if($seat->is_aisle)
-                    <div class="absolute -bottom-1 -left-1 w-2 h-2 bg-purple-500 rounded-full" title="Couloir"></div>
-                @endif
+
+        <!-- Group seats by row -->
+        @php
+            $seatsByRow = $flight->seats->groupBy(function($seat) {
+                return intval($seat->seat_number);
+            })->sortKeys();
+        @endphp
+
+        <div class="space-y-2 max-w-2xl mx-auto">
+            @foreach($seatsByRow as $rowNumber => $rowSeats)
+            <div class="flex items-center justify-center space-x-1">
+                <!-- Row number (left) -->
+                <div class="w-8 text-center text-sm font-medium text-gray-500">
+                    {{ $rowNumber }}
+                </div>
+
+                <!-- Seats A, B, C -->
+                @foreach(['A', 'B', 'C'] as $column)
+                    @php
+                        $seat = $rowSeats->firstWhere('seat_number', $rowNumber . $column);
+                    @endphp
+                    @if($seat)
+                    <div class="relative">
+                        <button class="w-10 h-10 rounded border-2 text-xs font-medium flex items-center justify-center transition-colors
+                            @if($seat->status === 'available') border-green-200 bg-green-50 text-green-700 hover:bg-green-100
+                            @elseif($seat->status === 'reserved') border-yellow-200 bg-yellow-50 text-yellow-700
+                            @else border-red-200 bg-red-50 text-red-700
+                            @endif"
+                            disabled>
+                            {{ $column }}
+                        </button>
+
+                        {{-- Window indicator --}}
+                        @if($seat->is_window)
+                        <div class="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white" title="Fenêtre"></div>
+                        @endif
+
+                        {{-- Aisle indicator --}}
+                        @if($seat->is_aisle)
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-purple-500 rounded-full border-2 border-white" title="Couloir"></div>
+                        @endif
+                    </div>
+                    @endif
+                @endforeach
+
+                <!-- Aisle -->
+                <div class="w-6"></div>
+
+                <!-- Seats D, E, F -->
+                @foreach(['D', 'E', 'F'] as $column)
+                    @php
+                        $seat = $rowSeats->firstWhere('seat_number', $rowNumber . $column);
+                    @endphp
+                    @if($seat)
+                    <div class="relative">
+                        <button class="w-10 h-10 rounded border-2 text-xs font-medium flex items-center justify-center transition-colors
+                            @if($seat->status === 'available') border-green-200 bg-green-50 text-green-700 hover:bg-green-100
+                            @elseif($seat->status === 'reserved') border-yellow-200 bg-yellow-50 text-yellow-700
+                            @else border-red-200 bg-red-50 text-red-700
+                            @endif"
+                            disabled>
+                            {{ $column }}
+                        </button>
+
+                        {{-- Aisle indicator --}}
+                        @if($seat->is_aisle)
+                        <div class="absolute -top-1 -left-1 w-3 h-3 bg-purple-500 rounded-full border-2 border-white" title="Couloir"></div>
+                        @endif
+
+                        {{-- Window indicator --}}
+                        @if($seat->is_window)
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white" title="Fenêtre"></div>
+                        @endif
+                    </div>
+                    @endif
+                @endforeach
+
+                <!-- Row number (right) -->
+                <div class="w-8 text-center text-sm font-medium text-gray-500">
+                    {{ $rowNumber }}
+                </div>
             </div>
             @endforeach
         </div>
 
-        <!-- Legend -->
-        <div class="mt-6 flex flex-wrap gap-4 text-sm">
+        <div class="mt-8 pt-6 border-t border-gray-100 flex flex-wrap gap-6 text-sm">
             <div class="flex items-center">
-                <div class="w-4 h-4 bg-green-50 border-2 border-green-200 rounded mr-2"></div>
-                <span>Disponible</span>
+                <div class="w-4 h-4 bg-green-50 border border-green-200 rounded mr-2"></div> Libre
             </div>
             <div class="flex items-center">
-                <div class="w-4 h-4 bg-yellow-50 border-2 border-yellow-200 rounded mr-2"></div>
-                <span>Réservé</span>
+                <div class="w-4 h-4 bg-red-50 border border-red-200 rounded mr-2"></div> Occupé
             </div>
             <div class="flex items-center">
-                <div class="w-4 h-4 bg-red-50 border-2 border-red-200 rounded mr-2"></div>
-                <span>Occupé</span>
+                <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div> Fenêtre
             </div>
             <div class="flex items-center">
-                <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                <span>Fenêtre</span>
-            </div>
-            <div class="flex items-center">
-                <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
-                <span>Couloir</span>
+                <div class="w-3 h-3 bg-purple-500 rounded-full mr-2"></div> Couloir
             </div>
         </div>
     </div>
 
-    <!-- Actions -->
+
+
     @if($flight->available_seats > 0)
     <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="text-center">
             <a href="{{ route('reservations.create', $flight) }}"
-               class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
                 <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>

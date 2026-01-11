@@ -58,20 +58,20 @@
                         @enderror
                     </div>
 
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <!-- <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                         <i class="fas fa-info-circle mr-2 text-blue-600"></i>
                         <span class="text-blue-800">
                             Dans cette version, le paiement est simulé comme réussi pour générer le ticket.
                             Tu pourras remplacer cette étape par Stripe ou un autre gateway plus tard.
                         </span>
-                    </div>
+                    </div> -->
 
                     <div class="flex justify-between">
                         <a href="{{ route('seats.select', $reservation) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Retour au choix du siège
                         </a>
-                        <button type="submit" class="inline-flex items-center px-6 py-2 bg-green-600 border border-transparent rounded-md text-white hover:bg-green-700 transition-colors">
+                        <button type="submit" class="inline-flex items-center px-6 py-2 bg-blue-600 border border-transparent rounded-md text-white hover:bg-blue-700 transition-colors">
                             Confirmer et télécharger le ticket
                             <i class="fas fa-download ml-2"></i>
                         </button>
